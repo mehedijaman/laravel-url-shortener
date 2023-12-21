@@ -8,26 +8,66 @@ class UrlService
 {
     public static function getAll()
     {
-        return Url::all();
+        $baseUrl = env('APP_URL');
+        $urls = Url::all();
+
+        foreach($urls as $url)
+        {
+            $short_url = $baseUrl . '/' . $url->ulid;
+            $url->short_url = $short_url;
+        }
+
+        return $urls;
+
     }
 
     public static function store($request){
-        return Url::create([
-            'user_id' => 1,
-            'ulid' => Str::random(8),
-            'url' => $request->url,
-            'alias' => $request->alias,
-            'password' => $request->password,
-            'expires_at' => $request->expires_at
-        ]);
+        try {
+            $url = Url::create([
+                'user_id' => 1,
+                'ulid' => Str::random(5),
+                'url' => $request->url,
+                'alias' => $request->alias,
+                'password' => $request->password,
+                'expires_at' => $request->expires_at
+            ]);
+            $response = [
+                'status' => true,
+                'message' => 'Url created successfully',
+                'url' => $url
+            ];
+            return $response;
+        } catch (\Throwable $th) {
+            $response = [
+                'status' => false,
+                'message' => $th->getMessage()
+            ];
+            return $response;
+        }
     }
 
     public static function update($request, $url){
-        $url->url = $request->url;
-        $url->alias = $request->alias;
-        $url->password = $request->password;
-        $url->expires_at = $request->expires_at;
-        $url->save();
+
+        try {
+            $url->url = $request->url;
+            $url->save();
+
+            $response = [
+                'status' => true,
+                'message' => 'Url updated successfully',
+                'url' => $url
+            ];
+
+            return $response;
+        } catch (\Throwable $th) {
+            $response = [
+                'status' => false,
+                'message' => $th->getMessage()
+            ];
+            return $response;
+        }
+
+
 
         return $url;
     }

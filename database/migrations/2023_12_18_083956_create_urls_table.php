@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id();
             $table->ulid('ulid')->unique();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('url');
+            $table->string('url', 500);
             $table->string('alias')->nullable();
             $table->string('password')->nullable();
             $table->bigInteger('total_clicks')->default(0);
             $table->datetime('last_visited')->nullable();
             $table->datetime('expires_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->unique(['user_id', 'url']);
         });

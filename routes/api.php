@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('url', UrlController::class);
+Route::delete('url/force-delete/{url}', [UrlController::class, 'forceDelete']);
+Route::get('url/restore/{url}', [UrlController::class, 'restore']);

@@ -13,7 +13,7 @@ class UrlPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class UrlPolicy
      */
     public function view(User $user, Url $url): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class UrlPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class UrlPolicy
      */
     public function update(User $user, Url $url): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -45,7 +45,7 @@ class UrlPolicy
      */
     public function delete(User $user, Url $url): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +53,7 @@ class UrlPolicy
      */
     public function restore(User $user, Url $url): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -61,6 +61,6 @@ class UrlPolicy
      */
     public function forceDelete(User $user, Url $url): bool
     {
-        //
+        return true;
     }
 }

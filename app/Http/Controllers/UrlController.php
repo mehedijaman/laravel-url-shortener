@@ -10,6 +10,9 @@ use App\Http\Requests\UpdateUrlRequest;
 
 class UrlController extends Controller
 {
+    public $baseUrl;
+
+
     /**
      * Display a listing of the resource.
      */
@@ -26,9 +29,9 @@ class UrlController extends Controller
     public function store(StoreUrlRequest $request)
     {
         $request->validated();
-        $Url = UrlService::store($request);
+        $response = UrlService::store($request);
 
-        return response()->json($Url);
+        return response()->json($response);
     }
 
     /**
@@ -50,20 +53,13 @@ class UrlController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Url $url)
+    public function update(Request $request, url $url)
     {
+        // return $request;
         // $request->validated();
+        $response = UrlService::update($request, $url);
 
-        // $url->url = $request->url;
-        // $url->alias = $request->alias;
-        // $url->password = $request->password;
-        // $url->expires_at = $request->expires_at;
-        // $url->save();
-
-        return $request->all();
-        // $url->url = $request->url;
-
-        // return response()->json($url);
+        return response()->json($response);
     }
 
     /**
@@ -73,6 +69,53 @@ class UrlController extends Controller
     {
         $url = $url->delete();
 
-        return response()->json($url);
+        $response = [
+            'status' => true,
+            'message' => 'Url deleted successfully',
+            'url' => $url
+        ];
+
+        return response()->json($response);
+    }
+
+    /**
+     * Parmanently remove the specified resource from storage
+     */
+    public function forceDelete($url)
+    {
+        $url = Url::withTrashed()->find($url)->forceDelete();
+
+        $response = [
+            'status' => true,
+            'message' => 'Url Deleted Parmanently !',
+            'url' => $url
+        ];
+
+        return response()->json($response);
+    }
+
+    /**
+     * Restore the specified resource from storage
+     */
+    public function restore($url)
+    {
+        $url = Url::withTrashed()->find($url)->restore();
+
+        $response = [
+            'status' => true,
+            'message' => 'Url Restored !',
+            'url' => $url
+        ];
+
+        return response()->json($response);
+    }
+
+    /* Redirect Url */
+    public function redirectUrl($ulid)
+    {
+        $url = Url::where('ulid', $ulid)->first();
+        $url->total_clicks = $url->total_clicks + 1;
+        $url->save();
+        return redirect($url->url);
     }
 }
